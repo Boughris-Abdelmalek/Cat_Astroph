@@ -1,1 +1,1 @@
-GET http://localhost:3000/tags
+GET http://localhost:3000/api/v1/cats/filter?filtertag=cute&omit=0&total=10
