@@ -1,0 +1,79 @@
+*, *::after, *::before {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    min-height: 100vh;
+}
+
+.search-section {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    min-height: 50vh;
+    color: white;
+}
+
+.search-section::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("https://images.unsplash.com/photo-1568043210943-0e8aac4b9734?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    filter: brightness(50%);
+    z-index: -1;
+}
+
+.search-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.search-container h1 {
+    font-size: 5rem;
+    padding-bottom: 3rem;
+}
+
+.search-container h3 {
+    font-size: 1.5rem;
+    padding-bottom: 1.5rem;
+}
+
+.search-input {
+    width: min(100%, 30rem);
+    padding: 1rem .5rem;
+    border: none;
+    outline: none;
+}
+
+.search-suggestions {
+    position: absolute;
+    top: 100%;
+    color: black;
+    background-color: white;
+    width: min(100%, 30rem);
+    max-height: 15rem;
+    overflow-y: scroll;
+    border: 3px solid grey;
+}
+
+.search-suggestions ul li {
+    outline: 1px solid grey;
+    list-style: none;
+    padding: .75rem 1.5rem;
+    cursor: pointer;
+}
+
+.search-suggestions ul li:hover {
+    background-color: rgba(128, 128, 128, 0.25);
+}

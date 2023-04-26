@@ -1,18 +1,14 @@
 <script setup>
-import Btn from './components/Btn.vue'
+import Search from './components/my-search.vue';
+import './assets/main.css';
 </script>
 
 <template>
     <header>
-        <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-        <div class="wrapper">
-            <Btn />
-        </div>
+        <Search />
     </header>
 
     <main>
-        <TheWelcome />
     </main>
 </template>
 

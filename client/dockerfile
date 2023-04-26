@@ -1,0 +1,9 @@
+FROM node:lts-alpine
+
+WORKDIR /cat_astroph/client
+
+COPY . .
+
+RUN npm install
+
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
