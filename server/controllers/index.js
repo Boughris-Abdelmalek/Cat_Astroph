@@ -1,14 +1,13 @@
 const axios = require("../utils/axios");
 
 // Magic values
-const DEFAULT_LIMIT = 10;
-const DEFAULT_SKIP = 0;
+const MAX_RETRIES = 3;
+const DEFAULT_CAT_SKIP = 10;
+const DEFAULT_CAT_LIMIT = 0;
 
-exports.getCatsByFilter = async (filtertag, omit, total) => {
+const getCatsByFilter = async (filtertag, omit, total) => {
     // Ensure filtertag is a string before splitting
-    if (typeof filtertag !== "string") {
-        filtertag = "";
-    }
+    filtertag = typeof filtertag === "string" ? filtertag : "";
 
     const params = new URLSearchParams({
         // find cats that have at least one tag that matches the substring provided in the query parameter.
@@ -59,7 +58,7 @@ exports.filterCats = async (req, res) => {
     }
 
     try {
-        const cats = await controller.getCatsByFilter(filtertag, omit, total);
+        const cats = await getCatsByFilter(filtertag, omit, total);
 
         res.status(200).json(cats);
     } catch (error) {
@@ -88,17 +87,30 @@ exports.matchCats = async (req, res) => {
         const filteredTags = tags.filter((tag) => tag.includes(string));
 
         // Fetch cats that have any of the filtered tags
-        const cats = await controller.getCatsByFilter(
-            filteredTags,
-            DEFAULT_SKIP,
-            DEFAULT_LIMIT
-        );
+        const promises = filteredTags.map((tag, index) => {
+            return new Promise((resolve) => {
+                // Adding a delay of index * 50 ms to not saturate the api
+              setTimeout(() => {
+                  resolve(getCatsByFilter(tag, DEFAULT_CAT_SKIP, DEFAULT_CAT_LIMIT));
+                }, index * 50);
+            });
+          });
+
+        const catsByTag = await Promise.all(promises).then((result) => {
+            return result.flat();
+        }).catch((error) => {
+            console.error(error);
+            throw new Error("Too many requests");
+        });
+
+        // Remove duplicate cats
+        const uniqueCats = Array.from(new Set(catsByTag));
 
         // Construct the response object
         const responseObj = {
             tags: filteredTags,
-            count: cats.length,
-            cats,
+            count: uniqueCats.length,
+            cats: uniqueCats,
         };
 
         res.status(200).json(responseObj);
