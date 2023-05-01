@@ -4,7 +4,7 @@ const axios = require("../utils/axios");
 const DEFAULT_LIMIT = 10;
 const DEFAULT_SKIP = 0;
 
-exports.getCatsByFilter = async (filtertag, omit, total) => {
+const getCatsByFilter = async (filtertag, omit, total) => {
     // Ensure filtertag is a string before splitting
     if (typeof filtertag !== "string") {
         filtertag = "";
@@ -59,7 +59,7 @@ exports.filterCats = async (req, res) => {
     }
 
     try {
-        const cats = await controller.getCatsByFilter(filtertag, omit, total);
+        const cats = await getCatsByFilter(filtertag, omit, total);
 
         res.status(200).json(cats);
     } catch (error) {
@@ -88,7 +88,7 @@ exports.matchCats = async (req, res) => {
         const filteredTags = tags.filter((tag) => tag.includes(string));
 
         // Fetch cats that have any of the filtered tags
-        const cats = await controller.getCatsByFilter(
+        const cats = await getCatsByFilter(
             filteredTags,
             DEFAULT_SKIP,
             DEFAULT_LIMIT
